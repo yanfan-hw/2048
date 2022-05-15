@@ -10,7 +10,7 @@ cc.Class({
             default: null,
             type: cc.Node
         },
-        heading: {
+        gameBoard: {
             default: null,
             type: cc.Node
         },
@@ -19,13 +19,13 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        this.heading.active = false;
+        this.gameBoard.active = false;
 
         cc.tween(this.label.node)
             .to(2, { opacity: 0 })
             .call(() => {
                 this.background.color = new cc.Color(255, 255, 255);
-                this.heading.active = true; 
+                this.gameBoard.active = true; 
             })
             .start()
         this.label.string = this._text;
