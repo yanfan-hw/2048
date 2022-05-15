@@ -1,4 +1,5 @@
 let colors = require("colors");
+cc.log(colors);
 
 cc.Class({
     extends: cc.Component,
@@ -18,9 +19,7 @@ cc.Class({
             this.labelNum.string = number;
             this.labelNum.node.active = true;
 
-            if (number in colors) {
-                this.node.color = colors[number];
-            }
+            this.node.color = colors[number];
         }
     },
 });
