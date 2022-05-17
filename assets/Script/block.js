@@ -1,5 +1,4 @@
 let colors = require("colors");
-cc.log(colors);
 
 cc.Class({
     extends: cc.Component,

@@ -1,4 +1,6 @@
 const ROWS = 4;
+const NUMBERS = [2, 4];
+
 cc.Class({
     extends: cc.Component,
 
@@ -15,6 +17,7 @@ cc.Class({
 
     start() {
         this.blockInit();
+        this.gameInit();
     },
 
     arrayInit: function (xDimension, yDimension) {
@@ -39,6 +42,43 @@ cc.Class({
                 this.blockArr[n][i] = block;
             }
         }
+    },
+    gameInit() {
+        // * Update score 0
+        this.data = this.arrayInit(ROWS, ROWS);
+
+        for (let row = 0; row < ROWS; row++) {
+            for (let col = 0; col < ROWS; col++) {
+                this.blockArr[row][col].getComponent("block").setNumber(0);
+                this.data[row][col] = 0;
+            }
+        }
+
+        this.randomNumber();
+        this.randomNumber();
+
+    },
+    randomNumber() {
+        let locations = this.getEmptyLocations();
+        if (locations.length == 0) return false;
+        let location = locations[Math.floor(Math.random() * locations.length)];
+        this.data[location.x][location.y] = NUMBERS[Math.floor(Math.random() * NUMBERS.length)];
+        let block = this.blockArr[location.x][location.y].getComponent("block");
+        block.setNumber(this.data[location.x][location.y]);
+    },
+    getEmptyLocations() {
+        let locations = [];
+        for (let row = 0; row < ROWS; row++) {
+            for (let col = 0; col < ROWS; col++) {
+                if (this.data[row][col] == 0) {
+                    locations.push({
+                        x: row,
+                        y: col,
+                    });
+                }
+            }
+        }
+        return locations;
     }
     // update (dt) {},
 });
