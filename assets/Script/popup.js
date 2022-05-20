@@ -6,7 +6,8 @@ cc.Class({
         playAgainBtn: cc.Node,
         labelScore: cc.Label,
         particle: cc.Node,
-        boardGame: cc.Node
+        boardGame: cc.Node,
+        
     },
 
     onLoad() {
