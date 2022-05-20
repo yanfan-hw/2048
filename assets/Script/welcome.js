@@ -21,8 +21,7 @@ cc.Class({
         this.label.fontSize = 200;
         this.mainMenu.active = false;
 
-        // this.logo.x = 30;
-        this.logo.angle = 30;
+        // this.logo.rotation = 30;
 
         cc.tween(this.label.node)
             .to(2, { opacity: 0 })
@@ -42,8 +41,8 @@ cc.Class({
     _animationBtn() {
         return this.anim = cc.repeatForever(
             cc.sequence(
-                cc.scaleBy(.5, 0.9, 1.1),
-                cc.scaleTo(.5, 1, 1)
+                cc.scaleBy(1, 0.9, 1.1),
+                cc.scaleTo(1, 1, 1)
             )
         ).easing(cc.easeBackInOut(.5));
     },
@@ -57,6 +56,9 @@ cc.Class({
     },
     _animLogo() {
         return this.anim3 = cc.rotateTo(5, 0).easing(cc.easeBackInOut(.5));
+    },
+    onClickBtnPlay() {
+        cc.director.loadScene("Main");
     }
 
     // update: function (dt) {
