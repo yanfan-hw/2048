@@ -6,7 +6,8 @@ cc.Class({
         playAgainBtn: cc.Node,
         labelScore: cc.Label,
         particle: cc.Node,
-        boardGame: cc.Node
+        boardGame: cc.Node,
+        
     },
 
     onLoad() {
@@ -15,7 +16,6 @@ cc.Class({
         this.particle.active = false
     },
     _animOpenPopup() {
-        // this.boardGame.opacity = 50;
         cc.tween(this.boardGame)
             .to(.5, { opacity: 50 })
             .start();
@@ -28,8 +28,6 @@ cc.Class({
                 this._animScore();
             })
             .start();
-        // let action = cc.moveTo(1, cc.v2(0, 0));
-        // this.node.runAction(action).easing((cc.easeBackInOut(.5)));
     },
     _animationBtn() {
     },
@@ -52,7 +50,6 @@ cc.Class({
         this.playAgainBtn.runAction(action).easing((cc.easeBackInOut(.5)));
     },
     _animScore() {
-        // Play Sound
         let score = { value: 0 };
         cc.tween(score)
             .to(2, { value: 200000 }, {
@@ -73,7 +70,6 @@ cc.Class({
         this._animHidePopup();
         this.particle.active = false;
         this.boardGame.opacity = 255;
-        //Reset Game
     }
 
     // update (dt) {},
