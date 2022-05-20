@@ -71,7 +71,6 @@ cc.Class({
     },
     onClickPlayAgainBtn() {
         this._animHidePopup();
-        this.particle.active = false;
         this.boardGame.opacity = 255;
     }
 
