@@ -1,0 +1,22 @@
+{
+  "name": "2048",
+  "version": "1.0.0",
+  "description": "Color-bg: [#edd073, #faf8ef]; Color-Colum-bg: [#eee4da, #eee1c9, #f9f6f2, #f77c5f, #f75f3b, #edcc62]",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yanfan-hw/2048.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yanfan-hw/2048/issues"
+  },
+  "homepage": "https://github.com/yanfan-hw/2048#readme",
+  "dependencies": {
+    "events": "^3.3.0"
+  }
+}
