@@ -1801,7 +1801,7 @@
     },
     "component": "",
     "_componentId": "eacb9rmiiNOg5I83YAHp9T6",
-    "handler": "gameInit",
+    "handler": "newGame",
     "customEventData": ""
   },
   {
