@@ -1,3 +1,4 @@
+const Emitter = require('mEmitter');
 cc.Class({
     extends: cc.Component,
 
@@ -9,12 +10,14 @@ cc.Class({
     },
 
     onLoad() {
+        Emitter.instance.registerEvent("showPopupLoseGame",this._animOpenPopup.bind(this));
         this.node.y = 1000;
-        this._animOpenPopup();
-        this._animAla();
+        this.node.active;
 
     },
-    _animOpenPopup() {
+    _animOpenPopup(score) {
+        this.node.active=true;
+        this._animAla();
         cc.tween(this.boardGame)
             .to(.5, { opacity: 50 })
             .start();
@@ -24,7 +27,7 @@ cc.Class({
             .call(() => {
                 this._animOpenBtnPlayAgain();
                 this.labelScore.string = 0;
-                this._animScore();
+                this._animScore(score);
             })
             .start();
     },
@@ -48,10 +51,10 @@ cc.Class({
         ).easing(cc.easeBackInOut(.5));
         this.playAgainBtn.runAction(action).easing((cc.easeBackInOut(.5)));
     },
-    _animScore() {
+    _animScore(scoreGame) {
         let score = { value: 0 };
         cc.tween(score)
-            .to(2, { value: 200000 }, {
+            .to(2, { value: scoreGame }, {
                 progress: (s, e, c, t) => {
                     let num = Math.round(e * t);
                     this.labelScore.string = String(num);

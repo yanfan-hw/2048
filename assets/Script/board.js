@@ -10,6 +10,7 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -19,7 +20,7 @@ cc.Class({
         // console.log(V.isNoneSound);
         Emitter.instance.registerEvent("transAudioSceneWelcomeToMain", this.transAudioSceneWelcomeToMain, this);
     },
-    transAudioSceneWelcomeToMain(data){
+    transAudioSceneWelcomeToMain(data) {
         console.log(data);
     },
 
@@ -110,10 +111,10 @@ cc.Class({
         // let isNode = this.getNodeToDestroy()
         // for (let i = 0; index < array.length; index++) {
         //     for (let index = 0; index < array.length; index++) {
-               
-                
+
+
         //     }
-            
+
         // }
         // console.log(isNode);
         V.blocks = this.createArray2D(4, 4, null)
@@ -132,51 +133,81 @@ cc.Class({
     },
     randomBlock() {
         let emptyLocations = this.getEmptyLocations();
-        // if (emptyLocations == "") {
-        //     return
-        // }
-        let locationRandom = emptyLocations[Math.floor(Math.random() * emptyLocations.length)];
-        let x = locationRandom.x;
-        let y = locationRandom.y;
-        let size = 150
-        let numberRandom = V.numbers[Math.floor(Math.random() * V.numbers.length)];
-        let block = this.createdBlock(size, size, V.positions[x][y].x, V.positions[x][y].y, numberRandom)
-        V.blocks[x][y] = block;
-        V.data[x][y] = numberRandom;
-        block.getComponent('block').appear()
+        if (emptyLocations.length > 0) {
+            let locationRandom = emptyLocations[Math.floor(Math.random() * emptyLocations.length)];
+            let x = locationRandom.x;
+            let y = locationRandom.y;
+            let size = 150
+            let numberRandom = V.numbers[Math.floor(Math.random() * V.numbers.length)];
+            let block = this.createdBlock(size, size, V.positions[x][y].x, V.positions[x][y].y, numberRandom)
+            V.blocks[x][y] = block;
+            V.data[x][y] = numberRandom;
+            block.getComponent('block').appear();
 
-        return true;
-    },
-
-    isCheckFull(){
-        let emptyLocations = this.getEmptyLocations();
-        if(emptyLocations.length==0){
-            this
+            emptyLocations = this.getEmptyLocations();
+            if(emptyLocations.length==0){
+                this.checkLose();
+                if(this.checkLose()){
+                    Emitter.instance.emit("showPopupLoseGame",V.scoreGame);
+                }
+            }
+            
         }
+
+
+        
     },
+
+
 
     afterMove(hasMoved) {
+        // this.node.stopAllActions()
+        if (V.isMoved == false) {
+
+            V.isCompleted = true
+            console.log(V.isCompleted);
+            return
+        }
         // if (hasMoved) {
         //     // this.updateScore(this.score+1);
         //     this.countScore()
         //     this.randomBlock();            
         // }
-        this.countScore()
-        this.randomBlock();
+        // this.countScore()
+        // this.randomBlock();
+
+        let actions = [cc.callFunc(() => { this.countScore() }),
+        cc.callFunc(() => { this.randomBlock() }),
+
+        cc.callFunc(()=>{
+            if(this.checkWin()){
+            
+                Emitter.instance.emit("showPopupWinGame",V.scoreGame);
+            }
+        }),
+        // cc.delayTime(0.05),
+        cc.callFunc(() => { V.isCompleted = true }),
+        ]
+        this.node.runAction(cc.sequence(actions))
         // if (this.checkFail()) {
         //     this.gameOver();
         // }
+        
+       
     },
     moveNode(block, position, callback) {
-        let actions = [cc.moveTo(0.05, position), cc.callFunc(() => { callback() })]
+        let actions = [cc.moveTo(0.05, position),
+        cc.callFunc(() => { V.isMoved = true; })
+
+            , cc.callFunc(() => { callback() })]
         block.runAction(cc.sequence(actions));
     },
     mergeNode(block, blockTarget, label, callback) {
         block.destroy();
-        let actions = [ cc.callFunc(() => {
+        let actions = [cc.callFunc(() => {
             blockTarget.getComponent('block').setLabel(label)
-            blockTarget.getComponent('block').merge()
-        }), cc.callFunc(() => { callback() })]
+            blockTarget.getComponent('block').merge()}), 
+            cc.callFunc(() => { callback() })]
         blockTarget.runAction(cc.sequence(actions));
     },
     inputRight() {
@@ -199,7 +230,7 @@ cc.Class({
         }
     },
     moveLeft(row, col, callback) {
-        let hasMoved = false;
+
         if (col == 0 || V.data[row][col] == 0) {
             callback();
             return;
@@ -210,10 +241,10 @@ cc.Class({
             V.data[row][col - 1] = V.data[row][col];
             V.data[row][col] = 0;
             V.blocks[row][col] = null;
+            V.isMoved = true
             this.moveNode(block, position, () => {
                 this.moveLeft(row, col - 1, callback);
             });
-            hasMoved = true;
         } else if (V.data[row][col - 1] == V.data[row][col]) {
             let block = V.blocks[row][col];
             let position = V.positions[row][col - 1];
@@ -221,49 +252,52 @@ cc.Class({
             V.scoreExtra += V.data[row][col - 1]
             V.data[row][col] = 0;
             V.blocks[row][col] = null;
+            V.isMoved = true
             this.moveNode(block, position, () => {
                 this.mergeNode(block, V.blocks[row][col - 1], V.data[row][col - 1], () => {
                     callback();
                 });
             });
-            hasMoved = true;
         } else {
+
             callback();
             return;
         }
     },
     moveRight(row, col, callback) {
-        let hasMoved = true;
+
         if (col == V.rows - 1 || V.data[row][col] == 0) {
+
             callback();
             return;
         } else if (V.data[row][col + 1] == 0) {
-            // 移动
             let block = V.blocks[row][col];
-            let position = V.positions[row][col + 1] ;
-            V.blocks[row][col + 1]  = block;
-            V.data[row][col + 1]  = V.data[row][col];
+            let position = V.positions[row][col + 1];
+            V.blocks[row][col + 1] = block;
+            V.data[row][col + 1] = V.data[row][col];
             V.data[row][col] = 0;
             V.blocks[row][col] = null;
+            V.isMoved = true
             this.moveNode(block, position, () => {
+                V.isMoved = true
                 this.moveRight(row, col + 1, callback);
             });
-            hasMoved = true;
-        } else if (V.data[row][col + 1]  == V.data[row][col]) {
-            // 合并
+        } else if (V.data[row][col + 1] == V.data[row][col]) {
             let block = V.blocks[row][col];
-            let position = V.positions[row][col + 1] ;
-            V.data[row][col + 1]  *= 2;
+            let position = V.positions[row][col + 1];
+            V.data[row][col + 1] *= 2;
             V.scoreExtra += V.data[row][col + 1]
             V.data[row][col] = 0;
             V.blocks[row][col] = null;
+            V.isMoved = true
             this.moveNode(block, position, () => {
-                this.mergeNode(block, V.blocks[row][col + 1] , V.data[row][col + 1] , () => {
-                     callback();
+                this.mergeNode(block, V.blocks[row][col + 1], V.data[row][col + 1], () => {
+                    V.isMoved = true
+                    callback();
                 });
             });
-            hasMoved = true;
         } else {
+
             callback();
             return;
         }
@@ -313,7 +347,6 @@ cc.Class({
         }
     },
     moveUp(row, col, callback) {
-        let hasMoved = false
         if (row == 0 || V.data[row][col] == 0) {
             callback();
             return;
@@ -324,10 +357,10 @@ cc.Class({
             V.data[row - 1][col] = V.data[row][col];
             V.data[row][col] = 0;
             V.blocks[row][col] = null;
+            V.isMoved = true
             this.moveNode(block, position, () => {
                 this.moveUp(row - 1, col, callback);
             });
-            hasMoved = true;
         } else if (V.data[row - 1][col] == V.data[row][col]) {
             let block = V.blocks[row][col];
             let position = V.positions[row - 1][col];
@@ -335,12 +368,12 @@ cc.Class({
             V.scoreExtra += V.data[row - 1][col]
             V.data[row][col] = 0;
             V.blocks[row][col] = null;
+            V.isMoved = true
             this.moveNode(block, position, () => {
                 this.mergeNode(block, V.blocks[row - 1][col], V.data[row - 1][col], () => {
                     callback();
                 });
             });
-            hasMoved = true;
         } else {
             callback();
             return;
@@ -371,7 +404,7 @@ cc.Class({
 
     },
     moveDown(row, col, callback) {
-        let hasMoved = true;
+
         if (row == V.rows - 1 || V.data[row][col] == 0) {
             callback();
             return;
@@ -383,6 +416,7 @@ cc.Class({
                 V.data[row + 1][col] = V.data[row][col];
                 V.data[row][col] = 0;
                 V.blocks[row][col] = null;
+                V.isMoved = true
                 this.moveNode(block, position, () => {
                     this.moveDown(row + 1, col, callback);
                 });
@@ -393,12 +427,12 @@ cc.Class({
                 V.scoreExtra += V.data[row + 1][col]
                 V.data[row][col] = 0;
                 V.blocks[row][col] = null;
+                V.isMoved = true
                 this.moveNode(block, position, () => {
                     this.mergeNode(block, V.blocks[row + 1][col], V.data[row + 1][col], () => {
                         callback();
                     });
                 });
-                hasMoved = true;
             } else {
                 callback();
                 return;
@@ -441,8 +475,8 @@ cc.Class({
         }
         this.gameInit()
         V.audio1.playSoundClick()
-        
-  
+
+
     },
     getNodeToMove() {
         let nodesToMove = [];
@@ -461,46 +495,49 @@ cc.Class({
 
 
 
-    // checkWin() {
-    //     for (let i = 0; i < 4; i++) {
-    //         for (let j = 0; j < 4; j++) {
-    //             if (V.data[i][j] == 2048) {
-    //                 cc.log("Win Game");
-    //                 return;
-    //             }
-    //         }
-    //     }
-    //     cc.log("Continoun");
-    // },
-    // checkLose() {
-    //     for (let i = 0; i < ROWS; i++) {
-    //         for (let j = 0; j < ROWS; j++) {
+    checkWin() {
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                if (V.data[i][j] == 16) {
+                    cc.log("Win Game");
+                    return true;
+                }
+            }
+        }
+        cc.log("Continoun");
+        return false;
+    },
 
-    //             if (i == 3 && j < 3) {
-    //                 if (V.data[i][j] == V.data[i][j+1]) {
-    //                     cc.log("Con choi dc");
-    //                     return;
-    //                 }
-    //             } else if (j == 3) {
-    //                 if (i < 3) {
-    //                     if (V.data[i][j] == V.data[i+1][j]) {
-    //                         cc.log("Con choi dc");
-    //                         return;
-    //                     }
-    //                 }
+    checkLose() {
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
 
-    //             }
-    //             else if (V.data[i][j] == V.data[i][j] ||
-    //                 V.data[i][j] == V.data[i][j]) {
-    //                 cc.log("Con choi dc");
-    //                 return;
-    //             }
+                if (i == 3 && j < 3) {
+                    if (V.data[i][j] == V.data[i][j + 1]) {
+                        cc.log("Con choi dc");
+                        return false;
+                    }
+                } else if (j == 3) {
+                    if (i < 3) {
+                        if (V.data[i][j] == V.data[i + 1][j]) {
+                            cc.log("Con choi dc");
+                            return false;
+                        }
+                    }
+
+                }
+                else if (V.data[i][j] == V.data[i + 1][j] ||
+                    V.data[i][j] == V.data[i][j + 1]) {
+                    cc.log("Con choi dc");
+                    return false;
+                }
 
 
-    //         }
-    //     }
-    //     cc.log("LOSE GAME");
-    // },
+            }
+        }
+        cc.log("LOSE GAME");
+        return true;
+    },
 
     // updateBlockNum: function () {
     //     for (let row = 0; row < 4; row++) {
