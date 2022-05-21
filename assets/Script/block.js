@@ -33,12 +33,12 @@ cc.Class({
     //     }
     // },
     setLabel(label) {
-        console.log(label);
+        // console.log(label);
         if (label == 0) {
             this.labelNum.string = ""
         } else {
             this.labelNum.string = label 
-            console.log(this.labelNum.string )
+            // console.log(this.labelNum.string )
         }
         this.node.color = colors[label];
         return 1

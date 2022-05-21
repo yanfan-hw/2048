@@ -6,40 +6,66 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        music:{
+        musicBackGround:{
             default:null,
             type:cc.AudioClip
         },
-        audioLose:{
+        soundLose:{
             default:null,
             type:cc.AudioClip
         },
-        audioWin:{
+        soundWin:{
             default:null,
             type:cc.AudioClip
         },
+        soundClick:{
+            default:null,
+            type:cc.AudioClip
+        },
+        _isNoneSound: false
     },
-
+    get isNoneSound() {
+        return this._isNoneSound
+    },
+    set isNoneSound(value) {
+        return this._isNoneSound = value
+    },
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        Emitter.instance.emit(Variables.transAudio, this);
+        Emitter.instance.emit("transAudio", this);
     },
 
 
-    playMusic(){
+    playMusicBackground(loop){
         this.pauseAll()
-        cc.audioEngine.play(this.music, false);
+        cc.audioEngine.play(this.musicBackGround, loop);
     },
 
-    playAudioLose(){
+    playSoundLose(){
         this.pauseAll()
-        cc.audioEngine.play(this.audioLose, false);
+        cc.audioEngine.play(this.soundLose, false);
     },
 
-    playAudioWin(){
+    playSoundWin(){
         this.pauseAll()
-        cc.audioEngine.play(this.audioWin, false);
+        cc.audioEngine.play(this.soundWin, false);
+    },
+    playSoundClick(){
+        // this.pauseAll()l
+        console.log("PlaySoundClick");
+        // console.log(this.isNoneSound);
+        if (this.isNoneSound) {
+            return
+        }
+        let soundClick = cc.audioEngine.play(this.soundClick, false);
+        return soundClick
+    },
+    pauseSoundClick(){
+        // console.log("Puse Click");
+        // let soundClick = pla
+        cc.audioEngine.stop(this.playSoundClick());
+        
     },
 
     pauseAll() {

@@ -62,7 +62,7 @@ cc.Class({
         this.scoreExtra.node.runAction(cc.sequence(actions))
     },
     updateScore(number) {
-        
+        console.log("update score");
         this.scoreNumber.string = number
         // console.log( this.scoreLabel.string)
     }

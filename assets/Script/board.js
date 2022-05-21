@@ -16,6 +16,11 @@ cc.Class({
 
     onLoad() {
         Emitter.instance.emit('transBlocksLayout', this);
+        // console.log(V.isNoneSound);
+        Emitter.instance.registerEvent("transAudioSceneWelcomeToMain", this.transAudioSceneWelcomeToMain, this);
+    },
+    transAudioSceneWelcomeToMain(data){
+        console.log(data);
     },
 
     start() {
@@ -96,6 +101,10 @@ cc.Class({
     },
     gameInit() {
         console.log("new Game");
+        V.scoreExtra = 0
+        V.scoreGame = 0
+        // this.countScore()
+        V.score.updateScore(V.scoreGame)
         // let nodeChild = this.node.childNodes()
         // console.log(this.node.getChildByName())
         // let isNode = this.getNodeToDestroy()
@@ -118,8 +127,8 @@ cc.Class({
 
         this.randomBlock()
         this.randomBlock()
-        console.log(V.data);
-        console.log(V.blocks);
+        // console.log(V.data);
+        // console.log(V.blocks);
     },
     randomBlock() {
         let emptyLocations = this.getEmptyLocations();
@@ -239,6 +248,7 @@ cc.Class({
             let block = V.blocks[row][col];
             let position = V.positions[row][col + 1] ;
             V.data[row][col + 1]  *= 2;
+            V.scoreExtra += V.data[row][col + 1]
             V.data[row][col] = 0;
             V.blocks[row][col] = null;
             this.moveNode(block, position, () => {
@@ -413,23 +423,20 @@ cc.Class({
         }
     },
     newGame() {
-        let nodesToDestroy = [];
+
+        // let nodesToDestroy = [];
         console.log("new Game");
         for (let row = 0; row < 4; row++) {
             for (let col = 0; col < 4; col++) {
-                // console.log(V.blocks[row][col]);
                 if (V.blocks[row][col] != null) {
-                //    V.block[row][col].destroy()
-                nodesToDestroy.push(V.blocks[row][col])
-                //    console.log(row, col);
+                    V.blocks[row][col].destroy()
                 }
             }
         }
-        // for (let index = 0; index < array.length; index++) {
-        //     const element = array[index];
-            
-        // }
-        // return nodesToDestroy
+        this.gameInit()
+        V.audio1.playSoundClick()
+        
+  
     },
     getNodeToMove() {
         let nodesToMove = [];

@@ -1,3 +1,5 @@
+const V = require("Variables");
+const Emitter = require('mEmitter');
 cc.Class({
     extends: cc.Component,
 
@@ -28,7 +30,18 @@ cc.Class({
             .call(() => {
                 this._initMainScreen();
             })
+            .call(() => {V.audio.playMusicBackground(true)})
             .start()
+
+
+        Emitter.instance = new Emitter();
+        Emitter.instance.registerEvent("transAudio", this.transAudio, this);
+        
+    },
+    transAudio(data){
+        V.audio = data
+        // console.log(V.audio);
+        // console.log(V.audio._isNoneSound)
     },
     _initMainScreen() {
         this.mainMenu.active = true;
@@ -58,7 +71,25 @@ cc.Class({
         return this.anim3 = cc.rotateTo(5, 0).easing(cc.easeBackInOut(.5));
     },
     onClickBtnPlay() {
-        cc.director.loadScene("Main");
+        // V.isNoneSound = V.audio._isNoneSound
+        // V.audio._isNoneSound
+        console.log(V.isNoneSound)
+        // console.log(V.audio._isNoneSound);
+        // console.log(V.isNoneSound);
+        V.audio.playSoundClick()
+        Emitter.instance.emit("transAudioSceneWelcomeToMain", V.audio.isNoneSound)
+        cc.director.loadScene("Main")
+        // let actions = [
+        //     //  cc.callFunc(V.isNoneSound = V.audio._isNoneSound),
+        //                 cc.callFunc( ()=> { Emitter.instance.emit("transAudioSceneWelcomeToMain", V.audio.isNoneSound)}),
+        //                 cc.callFunc( ()=> {  cc.director.loadScene("Main")})
+        
+        // ]
+
+        // this.node.runAction(cc.sequence(actions))
+       ;
+       
+        
     }
 
     // update: function (dt) {
