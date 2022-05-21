@@ -25,7 +25,6 @@ cc.Class({
         if (number == 0) {
             return
         }
-        console.log(number);
         this.scoreExtra.node.active = true
         this.scoreExtra.string = "+ " + number
         let actions = [cc.moveTo(0,0,0),

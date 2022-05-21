@@ -35,7 +35,6 @@ cc.Class({
         userData.score = V.scoreGame
         userData.moveStep = 10
         let bestScore = V.bestScore.loadBestScore()
-        console.log(bestScore.score);
         if (userData.score > bestScore.score) {
             V.bestScore.saveBestScore(userData)
             V.bestScore.loadBestScore()
@@ -250,7 +249,6 @@ cc.Class({
         }
     },
     inputRight() {
-        cc.log('move right');
         let getNodeToMove = [];
         for (let row = 0; row < V.rows; row++) {
             for (let col = V.rows - 1; col >= 0; col--) {
@@ -269,7 +267,6 @@ cc.Class({
         }
     },
     inputLeft() {
-        cc.log('move left');
         // let hasMoved = true;
         let getNodeToMove = [];
         for (let row = 0; row < V.rows; ++row) {
@@ -376,7 +373,6 @@ cc.Class({
             }
     },
     inputDown() {
-        cc.log('move down');
         let getNodeToMove = [];
         for (let row = V.rows - 1; row >= 0; row--) {
             for (let col = 0; col < V.rows; col++) {

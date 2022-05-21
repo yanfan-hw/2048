@@ -165,7 +165,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 239.88903684828952
+      "z": 316.09927238132013
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -3131,6 +3131,9 @@
       "__id__": 8
     },
     "_enabled": true,
+    "btnNewGame": {
+      "__id__": 43
+    },
     "_id": "84qzWTlQZBeptLk2tpWNgh"
   },
   {
