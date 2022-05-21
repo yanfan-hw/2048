@@ -9,22 +9,27 @@ cc.Class({
             type: cc.Label
         },
         _text: '2048',
+        _isClick: false,
         mainMenu: cc.Node,
         btnPlay: cc.Node,
         btnSetting: cc.Node,
         cloud1: cc.Node,
         cloud2: cc.Node,
         logo: cc.Node
+
+    },
+    get isClick(){
+        return this._isClick
+    },
+    set isClick (value){
+        return this._isClick = value
     },
 
-    // use this for initialization
     onLoad: function () {
+        this.isClick = false
         this.label.string = this._text;
         this.label.fontSize = 200;
         this.mainMenu.active = false;
-
-        // this.logo.rotation = 30;
-
         cc.tween(this.label.node)
             .to(2, { opacity: 0 })
             .call(() => {
@@ -32,16 +37,12 @@ cc.Class({
             })
             .call(() => {V.audio.playMusicBackground(true)})
             .start()
-
-
         Emitter.instance = new Emitter();
         Emitter.instance.registerEvent("transAudio", this.transAudio, this);
         
     },
     transAudio(data){
         V.audio = data
-        // console.log(V.audio);
-        // console.log(V.audio._isNoneSound)
     },
     _initMainScreen() {
         this.mainMenu.active = true;
@@ -71,22 +72,15 @@ cc.Class({
         return this.anim3 = cc.rotateTo(5, 0).easing(cc.easeBackInOut(.5));
     },
     onClickBtnPlay() {
-        // V.isNoneSound = V.audio._isNoneSound
-        // V.audio._isNoneSound
-        console.log(V.isNoneSound)
-        // console.log(V.audio._isNoneSound);
-        // console.log(V.isNoneSound);
-        V.audio.playSoundClick()
-        Emitter.instance.emit("transAudioSceneWelcomeToMain", V.audio.isNoneSound)
-        cc.director.loadScene("Main")
-        // let actions = [
-        //     //  cc.callFunc(V.isNoneSound = V.audio._isNoneSound),
-        //                 cc.callFunc( ()=> { Emitter.instance.emit("transAudioSceneWelcomeToMain", V.audio.isNoneSound)}),
-        //                 cc.callFunc( ()=> {  cc.director.loadScene("Main")})
-        
-        // ]
+        if (this.isClick == false) {
+            console.log(V.isNoneSound)
+            V.audio.playSoundClick()
+            Emitter.instance.emit("transAudioSceneWelcomeToMain", V.audio.isNoneSound)
+            cc.director.loadScene("Main")
+            this.isClick = true
+        }
+        return
 
-        // this.node.runAction(cc.sequence(actions))
        ;
        
         

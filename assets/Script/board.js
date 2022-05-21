@@ -20,7 +20,6 @@ cc.Class({
         Emitter.instance.registerEvent("transAudioSceneWelcomeToMain", this.transAudioSceneWelcomeToMain, this);
     },
     transAudioSceneWelcomeToMain(data) {
-        console.log(data);
     },
 
     start() {
@@ -35,7 +34,6 @@ cc.Class({
         let userData = new Object()
         userData.score = V.scoreGame
         userData.moveStep = 10
-
         let bestScore = V.bestScore.loadBestScore()
         console.log(bestScore.score);
         if (userData.score > bestScore.score) {
@@ -118,10 +116,9 @@ cc.Class({
             V.blocks[x][y] = block;
             V.data[x][y] = numberRandom;
             block.getComponent('block').appear();
-
             emptyLocations = this.getEmptyLocations();
             if (emptyLocations.length == 0) {
-                this.checkLose();
+                // this.checkLose();
                 if (this.checkLose()) {
                     Emitter.instance.emit("showPopupLoseGame", V.scoreGame);
                     Emitter.instance.emit('onDisableKeyDownLoseGame');
@@ -131,13 +128,11 @@ cc.Class({
         }
     },
 
-    afterMove(hasMoved) {
+    afterMove() {
         if (V.isMoved == false) {
             V.isCompleted = true
-            console.log(V.isCompleted);
             return
         }
-
         let actions = [cc.callFunc(() => { this.countScore() }),
         cc.callFunc(() => { this.randomBlock() }),
         cc.callFunc(() => {
@@ -152,39 +147,35 @@ cc.Class({
     },
     moveNode(block, position, callback) {
         let actions = [cc.moveTo(0.05, position),
-        cc.callFunc(() => { V.isMoved = true; })
-            , cc.callFunc(() => { callback() })]
+        cc.callFunc(() => { V.isMoved = true }), 
+        cc.callFunc(() => { callback() })]
         block.runAction(cc.sequence(actions));
     },
     mergeNode(block, blockTarget, label, callback) {
         block.destroy();
-        let actions = [cc.callFunc(() => { blockTarget.getComponent('block').setLabel(label) }),
+        let actions = [cc.callFunc(() => { blockTarget.getComponent('block').setLabel(label)}),
         cc.callFunc(() => { blockTarget.getComponent('block').merge() }),
         cc.callFunc(() => { V.isMoved = true; }),
         cc.callFunc(() => { callback() })]
         blockTarget.runAction(cc.sequence(actions));
     },
-    inputRight() {
-        let nodesToMove = this.getNodeToMove()
+    // inputRight() {
+    //     let nodesToMove = this.getNodeToMove()
 
-        for (let i = nodesToMove.length - 1; i >= 0; i--) {
-            // console.log(nodesToMove[i]);
-            let actions = [cc.callFunc(() => { this.moveRight(nodesToMove[i].x, nodesToMove[i].y) }),
-            // cc.callFunc( ()=> {this.merge}), 
-
-            cc.callFunc(() => { this.isMerged = false }),
-            cc.delayTime(0.1),
-            cc.callFunc(() => {
-                if (i == 0) {
-                    console.log("randomBlock");
-                    this.randomBlock()
-                }
-            })]
-            this.node.runAction(cc.sequence(actions))
-        }
-    },
+    //     for (let i = nodesToMove.length - 1; i >= 0; i--) {
+    //         let actions = [cc.callFunc(() => { this.moveRight(nodesToMove[i].x, nodesToMove[i].y) }),
+    //         cc.callFunc(() => { this.isMerged = false }),
+    //         cc.delayTime(0.1),
+    //         cc.callFunc(() => {
+    //             if (i == 0) {
+    //                 console.log("randomBlock");
+    //                 this.randomBlock()
+    //             }
+    //         })]
+    //         this.node.runAction(cc.sequence(actions))
+    //     }
+    // },
     moveLeft(row, col, callback) {
-
         if (col == 0 || V.data[row][col] == 0) {
             callback();
             return;
@@ -195,8 +186,8 @@ cc.Class({
             V.data[row][col - 1] = V.data[row][col];
             V.data[row][col] = 0;
             V.blocks[row][col] = null;
-            V.isMoved = true
             this.moveNode(block, position, () => {
+                V.isMoved = true
                 this.moveLeft(row, col - 1, callback);
             });
         } else if (V.data[row][col - 1] == V.data[row][col]) {
@@ -206,9 +197,11 @@ cc.Class({
             V.scoreExtra += V.data[row][col - 1]
             V.data[row][col] = 0;
             V.blocks[row][col] = null;
-            V.isMoved = true
+            
             this.moveNode(block, position, () => {
+                
                 this.mergeNode(block, V.blocks[row][col - 1], V.data[row][col - 1], () => {
+                    V.isMoved = true
                     callback();
                 });
             });
@@ -231,7 +224,7 @@ cc.Class({
             V.data[row][col + 1] = V.data[row][col];
             V.data[row][col] = 0;
             V.blocks[row][col] = null;
-            V.isMoved = true
+            // V.isMoved = true
             this.moveNode(block, position, () => {
                 V.isMoved = true
                 this.moveRight(row, col + 1, callback);
@@ -243,7 +236,7 @@ cc.Class({
             V.scoreExtra += V.data[row][col + 1]
             V.data[row][col] = 0;
             V.blocks[row][col] = null;
-            V.isMoved = true
+            // V.isMoved = true
             this.moveNode(block, position, () => {
                 this.mergeNode(block, V.blocks[row][col + 1], V.data[row][col + 1], () => {
                     V.isMoved = true
@@ -258,7 +251,6 @@ cc.Class({
     },
     inputRight() {
         cc.log('move right');
-        let hasMoved = true;
         let getNodeToMove = [];
         for (let row = 0; row < V.rows; row++) {
             for (let col = V.rows - 1; col >= 0; col--) {
@@ -272,13 +264,13 @@ cc.Class({
         for (let i = 0; i < getNodeToMove.length; ++i) {
             this.moveRight(getNodeToMove[i].x, getNodeToMove[i].y, () => {
                 counter++;
-                this.checkCounter(counter, getNodeToMove, hasMoved)
+                this.checkCounter(counter, getNodeToMove)
             });
         }
     },
     inputLeft() {
         cc.log('move left');
-        let hasMoved = true;
+        // let hasMoved = true;
         let getNodeToMove = [];
         for (let row = 0; row < V.rows; ++row) {
             for (let col = 0; col < V.rows; ++col) {
@@ -287,14 +279,13 @@ cc.Class({
                 }
             }
         }
-        console.log(getNodeToMove);
 
         let counter = 0;
         for (let i = 0; i < getNodeToMove.length; ++i) {
             this.moveLeft(getNodeToMove[i].x, getNodeToMove[i].y, () => {
                 counter++;
 
-                this.checkCounter(counter, getNodeToMove, hasMoved)
+                this.checkCounter(counter, getNodeToMove)
             });
         }
     },
@@ -309,8 +300,9 @@ cc.Class({
             V.data[row - 1][col] = V.data[row][col];
             V.data[row][col] = 0;
             V.blocks[row][col] = null;
-            V.isMoved = true
+            
             this.moveNode(block, position, () => {
+                V.isMoved = true
                 this.moveUp(row - 1, col, callback);
             });
         } else if (V.data[row - 1][col] == V.data[row][col]) {
@@ -320,9 +312,10 @@ cc.Class({
             V.scoreExtra += V.data[row - 1][col]
             V.data[row][col] = 0;
             V.blocks[row][col] = null;
-            V.isMoved = true
+           
             this.moveNode(block, position, () => {
                 this.mergeNode(block, V.blocks[row - 1][col], V.data[row - 1][col], () => {
+                    V.isMoved = true
                     callback();
                 });
             });
@@ -332,11 +325,6 @@ cc.Class({
         }
     },
     inputUp() {
-
-        let hasMoved = true;
-        console.log("Down");
-
-
         let getNodeToMove = [];
         for (let row = 0; row < V.rows; row++) {
             for (let col = 0; col < V.rows; col++) {
@@ -349,14 +337,11 @@ cc.Class({
         for (let i = 0; i < getNodeToMove.length; ++i) {
             this.moveUp(getNodeToMove[i].x, getNodeToMove[i].y, () => {
                 counter++;
-                this.checkCounter(counter, getNodeToMove, hasMoved)
+                this.checkCounter(counter, getNodeToMove)
             });
         }
-
-
     },
     moveDown(row, col, callback) {
-
         if (row == V.rows - 1 || V.data[row][col] == 0) {
             callback();
             return;
@@ -368,8 +353,8 @@ cc.Class({
                 V.data[row + 1][col] = V.data[row][col];
                 V.data[row][col] = 0;
                 V.blocks[row][col] = null;
-                V.isMoved = true
                 this.moveNode(block, position, () => {
+                    V.isMoved = true
                     this.moveDown(row + 1, col, callback);
                 });
             } else if (V.data[row + 1][col] == V.data[row][col]) {
@@ -379,9 +364,9 @@ cc.Class({
                 V.scoreExtra += V.data[row + 1][col]
                 V.data[row][col] = 0;
                 V.blocks[row][col] = null;
-                V.isMoved = true
                 this.moveNode(block, position, () => {
                     this.mergeNode(block, V.blocks[row + 1][col], V.data[row + 1][col], () => {
+                        V.isMoved = true
                         callback();
                     });
                 });
@@ -392,7 +377,6 @@ cc.Class({
     },
     inputDown() {
         cc.log('move down');
-        let hasMoved = true;
         let getNodeToMove = [];
         for (let row = V.rows - 1; row >= 0; row--) {
             for (let col = 0; col < V.rows; col++) {
@@ -405,18 +389,16 @@ cc.Class({
         for (let i = 0; i < getNodeToMove.length; i++) {
             this.moveDown(getNodeToMove[i].x, getNodeToMove[i].y, () => {
                 counter++;
-                this.checkCounter(counter, getNodeToMove, hasMoved)
+                this.checkCounter(counter, getNodeToMove)
             });
         }
     },
-    checkCounter(counter, getNodeToMove, hasMoved) {
+    checkCounter(counter, getNodeToMove) {
         if (counter == getNodeToMove.length) {
-            this.afterMove(hasMoved);
+            this.afterMove();
         }
     },
     newGame() {
-
-        console.log("new Game");
         for (let row = 0; row < 4; row++) {
             for (let col = 0; col < 4; col++) {
                 if (V.blocks[row][col] != null) {
@@ -428,18 +410,17 @@ cc.Class({
         Emitter.instance.emit('onEnableKeyDown');
         V.audio1.playSoundClick();
     },
-    getNodeToMove() {
-        let nodesToMove = [];
-        for (let row = 0; row < 4; row++) {
-            for (let col = 0; col < 4; col++) {
-                if (V.data[row][col] != 0) {
-                    nodesToMove.push({ x: row, y: col });
-                }
-            }
-        }
-        return nodesToMove
-    },
-
+    // getNodeToMove() {
+    //     let nodesToMove = [];
+    //     for (let row = 0; row < 4; row++) {
+    //         for (let col = 0; col < 4; col++) {
+    //             if (V.data[row][col] != 0) {
+    //                 nodesToMove.push({ x: row, y: col });
+    //             }
+    //         }
+    //     }
+    //     return nodesToMove
+    // },
     checkWin() {
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
@@ -450,11 +431,9 @@ cc.Class({
         }
         return false;
     },
-
     checkLose() {
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
-
                 if (i == 3 && j < 3) {
                     if (V.data[i][j] == V.data[i][j + 1]) {
                         return false;
@@ -465,7 +444,6 @@ cc.Class({
                             return false;
                         }
                     }
-
                 }
                 else if (V.data[i][j] == V.data[i + 1][j] ||
                     V.data[i][j] == V.data[i][j + 1]) {

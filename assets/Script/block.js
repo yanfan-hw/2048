@@ -17,41 +17,24 @@ cc.Class({
     },
     onLoad() {
         Emitter.instance.emit('transBlock', this);
-        this.animZoom = cc.scaleTo(0.2, 1);
     },
-    // setNumber: function (number) {
-    //     if (number == 0) {
-    //         this.labelNum.node.active = false;
-    //         this.background.color = colors[0];
-    //     }
-    //     else {
-    //         this.labelNum.node.active = true;
-    //         this.background.scale = 0;
-    //         this.background.color = colors[number];
-    //         this.background.runAction(this.animZoom);
-    //         this.labelNum.string = number;
-    //     }
-    // },
     setLabel(label) {
-        // console.log(label);
         if (label == 0) {
             this.labelNum.string = ""
         } else {
             this.labelNum.string = label 
-            // console.log(this.labelNum.string )
         }
         this.node.color = colors[label];
         return 1
     },
     appear() {
         let actions = [ cc.scaleTo(0, 0),
-                        // cc.scaleTo(0.2, 1.2),
-                        cc.scaleTo(0.2,1)]
+                        cc.scaleTo(0.05,1)]
         this.node.runAction(cc.sequence(actions))
     },
     merge() {
-        let actions = [ cc.scaleTo(0.2, 1.3),
-                        cc.scaleTo(0.2, 1),
+        let actions = [ cc.scaleTo(0.05, 1.3),
+                        cc.scaleTo(0.05, 1),
                         ]
         this.node.runAction(cc.sequence(actions))
     },

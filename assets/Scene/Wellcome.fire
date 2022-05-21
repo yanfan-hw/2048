@@ -168,7 +168,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 239.88903684828952
+      "z": 316.09927238132013
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -3632,6 +3632,7 @@
     },
     "_isNoneSound": false,
     "_isNoneMusic": false,
+    "_isClick": false,
     "_id": "7bMjpIaKxPVITgihneSIFI"
   },
   {
@@ -3755,6 +3756,7 @@
       "__id__": 9
     },
     "_text": "2048",
+    "_isClick": false,
     "mainMenu": {
       "__id__": 10
     },

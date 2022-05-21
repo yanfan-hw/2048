@@ -31,7 +31,7 @@ let Variables = {
     block: null,
     audio: null,
     audio1: null,
-    
+    game: null,
     userData: {
         score: 0,
         moveStep: 0
