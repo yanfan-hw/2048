@@ -41,6 +41,7 @@ cc.Class({
     transAudio(data) {
         V.audio1 = data
         V.audio1.isNoneSound = V.isNoneSound
+        V.audio1.isNoneMusic = V.isNoneMusic
     },
     transBestScore(data) {
         V.bestScore = data

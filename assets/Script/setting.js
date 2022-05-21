@@ -95,8 +95,12 @@ cc.Class({
         this.isNoneMusic = !(this.isNoneMusic);
         if (this.isNoneMusic) {
             V.audio.pauseAll()
+            V.audio.isNoneMusic = true
+            V.isNoneMusic = V.audio.isNoneMusic
         }else {
             V.audio.playMusicBackground()
+            V.audio.isNoneMusic = false
+            V.isNoneMusic = V.audio.isNoneMusic
         }
         this.noneMusic.active = this.isNoneMusic;
     }

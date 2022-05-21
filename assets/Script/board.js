@@ -117,7 +117,6 @@ cc.Class({
             block.getComponent('block').appear();
             emptyLocations = this.getEmptyLocations();
             if (emptyLocations.length == 0) {
-                // this.checkLose();
                 if (this.checkLose()) {
                     Emitter.instance.emit("showPopupLoseGame", V.scoreGame);
                     Emitter.instance.emit('onDisableKeyDownLoseGame');
@@ -158,22 +157,6 @@ cc.Class({
         cc.callFunc(() => { callback() })]
         blockTarget.runAction(cc.sequence(actions));
     },
-    // inputRight() {
-    //     let nodesToMove = this.getNodeToMove()
-
-    //     for (let i = nodesToMove.length - 1; i >= 0; i--) {
-    //         let actions = [cc.callFunc(() => { this.moveRight(nodesToMove[i].x, nodesToMove[i].y) }),
-    //         cc.callFunc(() => { this.isMerged = false }),
-    //         cc.delayTime(0.1),
-    //         cc.callFunc(() => {
-    //             if (i == 0) {
-    //                 console.log("randomBlock");
-    //                 this.randomBlock()
-    //             }
-    //         })]
-    //         this.node.runAction(cc.sequence(actions))
-    //     }
-    // },
     moveLeft(row, col, callback) {
         if (col == 0 || V.data[row][col] == 0) {
             callback();
@@ -223,7 +206,6 @@ cc.Class({
             V.data[row][col + 1] = V.data[row][col];
             V.data[row][col] = 0;
             V.blocks[row][col] = null;
-            // V.isMoved = true
             this.moveNode(block, position, () => {
                 V.isMoved = true
                 this.moveRight(row, col + 1, callback);
@@ -235,7 +217,6 @@ cc.Class({
             V.scoreExtra += V.data[row][col + 1]
             V.data[row][col] = 0;
             V.blocks[row][col] = null;
-            // V.isMoved = true
             this.moveNode(block, position, () => {
                 this.mergeNode(block, V.blocks[row][col + 1], V.data[row][col + 1], () => {
                     V.isMoved = true
@@ -257,7 +238,6 @@ cc.Class({
                 }
             }
         }
-
         let counter = 0;
         for (let i = 0; i < getNodeToMove.length; ++i) {
             this.moveRight(getNodeToMove[i].x, getNodeToMove[i].y, () => {
@@ -267,7 +247,6 @@ cc.Class({
         }
     },
     inputLeft() {
-        // let hasMoved = true;
         let getNodeToMove = [];
         for (let row = 0; row < V.rows; ++row) {
             for (let col = 0; col < V.rows; ++col) {
@@ -406,21 +385,10 @@ cc.Class({
         Emitter.instance.emit('onEnableKeyDown');
         V.audio1.playSoundClick();
     },
-    // getNodeToMove() {
-    //     let nodesToMove = [];
-    //     for (let row = 0; row < 4; row++) {
-    //         for (let col = 0; col < 4; col++) {
-    //             if (V.data[row][col] != 0) {
-    //                 nodesToMove.push({ x: row, y: col });
-    //             }
-    //         }
-    //     }
-    //     return nodesToMove
-    // },
     checkWin() {
-        for (let i = 0; i < 4; i++) {
-            for (let j = 0; j < 4; j++) {
-                if (V.data[i][j] == 2048) {
+        for (let row = 0; row < V.rows; row++) {
+            for (let col = 0; col < V.rows; col++) {
+                if (V.data[row][col] == 2048) {
                     return true;
                 }
             }
@@ -428,21 +396,21 @@ cc.Class({
         return false;
     },
     checkLose() {
-        for (let i = 0; i < 4; i++) {
-            for (let j = 0; j < 4; j++) {
-                if (i == 3 && j < 3) {
-                    if (V.data[i][j] == V.data[i][j + 1]) {
+        for (let row = 0; row < 4; row++) {
+            for (let col = 0; col < 4; col++) {
+                if (row == 3 && col < 3) {
+                    if (V.data[row][col] == V.data[row][col + 1]) {
                         return false;
                     }
-                } else if (j == 3) {
-                    if (i < 3) {
-                        if (V.data[i][j] == V.data[i + 1][j]) {
+                } else if (col == 3) {
+                    if (row < 3) {
+                        if (V.data[row][col] == V.data[row + 1][col]) {
                             return false;
                         }
                     }
                 }
-                else if (V.data[i][j] == V.data[i + 1][j] ||
-                    V.data[i][j] == V.data[i][j + 1]) {
+                else if (V.data[row][col] == V.data[row + 1][col] ||
+                    V.data[row][col] == V.data[row][col + 1]) {
                     return false;
                 }
             }

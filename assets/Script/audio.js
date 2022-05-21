@@ -22,7 +22,8 @@ cc.Class({
             default:null,
             type:cc.AudioClip
         },
-        _isNoneSound: false
+        _isNoneSound: false,
+        _isNoneMusic: false
     },
     get isNoneSound() {
         return this._isNoneSound
@@ -30,25 +31,42 @@ cc.Class({
     set isNoneSound(value) {
         return this._isNoneSound = value
     },
+    get isNoneMusic() {
+        return this._isNoneMusic
+    },
+    set isNoneMusic(value) {
+        return this._isNoneMusic = value
+    },
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
+        this.isNoneMusic = false
         Emitter.instance.emit("transAudio", this);
     },
 
 
     playMusicBackground(loop){
         this.pauseAll()
+        console.log(this.isNoneMusic);
+        if (this.isNoneMusic) {
+            return
+        }
         cc.audioEngine.play(this.musicBackGround, loop);
     },
 
     playSoundLose(){
         this.pauseAll()
+        if (this.isNoneSound) {
+            return
+        }
         cc.audioEngine.play(this.soundLose, false);
     },
 
     playSoundWin(){
         this.pauseAll()
+        if (this.isNoneSound) {
+            return
+        }
         let soundWin = cc.audioEngine.play(this.soundWin, false);
         return soundWin;
     },
