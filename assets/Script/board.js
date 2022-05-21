@@ -104,32 +104,12 @@ cc.Class({
         console.log("new Game");
         V.scoreExtra = 0
         V.scoreGame = 0
-        // this.countScore()
+        V.isCompleted = true
         V.score.updateScore(V.scoreGame)
-        // let nodeChild = this.node.childNodes()
-        // console.log(this.node.getChildByName())
-        // let isNode = this.getNodeToDestroy()
-        // for (let i = 0; index < array.length; index++) {
-        //     for (let index = 0; index < array.length; index++) {
-
-
-        //     }
-
-        // }
-        // console.log(isNode);
         V.blocks = this.createArray2D(4, 4, null)
         V.data = this.createArray2D(4, 4, 0)
-        // V.blocks = [];
-        // V.data = [];
-        // for (let i = 0; i < ROWS; i++) {
-        //     V.blocks.push([null, null, null, null]);
-        //     V.data.push([0, 0, 0, 0]);
-        // }
-
         this.randomBlock()
         this.randomBlock()
-        // console.log(V.data);
-        // console.log(V.blocks);
     },
     randomBlock() {
         let emptyLocations = this.getEmptyLocations();
@@ -178,14 +158,11 @@ cc.Class({
 
         let actions = [cc.callFunc(() => { this.countScore() }),
         cc.callFunc(() => { this.randomBlock() }),
-
         cc.callFunc(()=>{
             if(this.checkWin()){
-            
                 Emitter.instance.emit("showPopupWinGame",V.scoreGame);
             }
         }),
-        // cc.delayTime(0.05),
         cc.callFunc(() => { V.isCompleted = true }),
         ]
         this.node.runAction(cc.sequence(actions))
@@ -198,15 +175,14 @@ cc.Class({
     moveNode(block, position, callback) {
         let actions = [cc.moveTo(0.05, position),
         cc.callFunc(() => { V.isMoved = true; })
-
             , cc.callFunc(() => { callback() })]
         block.runAction(cc.sequence(actions));
     },
     mergeNode(block, blockTarget, label, callback) {
         block.destroy();
-        let actions = [cc.callFunc(() => {
-            blockTarget.getComponent('block').setLabel(label)
-            blockTarget.getComponent('block').merge()}), 
+        let actions = [cc.callFunc(() => { blockTarget.getComponent('block').setLabel(label)}),
+            cc.callFunc(() => {blockTarget.getComponent('block').merge()}), 
+            cc.callFunc(() => { V.isMoved = true; }),
             cc.callFunc(() => { callback() })]
         blockTarget.runAction(cc.sequence(actions));
     },
