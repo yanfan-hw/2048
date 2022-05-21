@@ -19,6 +19,7 @@ let Variables = {
     scoreGame: 0,
     scoreExtra: 0,
     bestScoreGame: 0,
+    isNoneSound: false,
     // blockArr: [],
 
 
@@ -26,6 +27,9 @@ let Variables = {
     bestScore: null,
     blocksLayout: null,
     block: null,
+    audio: null,
+    audio1: null,
+    
     userData: {
         score: 0,
         moveStep: 0

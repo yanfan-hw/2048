@@ -72,16 +72,19 @@
       },
       {
         "__id__": 39
+      },
+      {
+        "__id__": 90
       }
     ],
     "_active": true,
     "_level": 1,
     "_components": [
       {
-        "__id__": 90
+        "__id__": 92
       },
       {
-        "__id__": 91
+        "__id__": 93
       }
     ],
     "_prefab": null,
@@ -3593,7 +3596,7 @@
     },
     "component": "",
     "_componentId": "3e370K5sXlBeps6fYQ66z/F",
-    "handler": "onClickSubmit",
+    "handler": "onClickBtnClose",
     "customEventData": ""
   },
   {
@@ -3641,6 +3644,87 @@
     },
     "fileId": "4bP84NFDFOp7IW/C+gEzjN",
     "sync": false
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "Audio",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 2
+    },
+    "_children": [],
+    "_active": true,
+    "_level": 2,
+    "_components": [
+      {
+        "__id__": 91
+      }
+    ],
+    "_prefab": null,
+    "_opacity": 255,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 0,
+      "height": 0
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_position": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_scale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_eulerAngles": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_skewX": 0,
+    "_skewY": 0,
+    "_is3DNode": false,
+    "groupIndex": 0,
+    "_id": "a4GQVQ8TtI6rmh6Pv9I/ca"
+  },
+  {
+    "__type__": "30383OlFsZDOo0f0LMTyDQN",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 90
+    },
+    "_enabled": true,
+    "musicBackGround": {
+      "__uuid__": "337aae20-a6be-4617-95e8-f2fec5ab52a7"
+    },
+    "soundLose": {
+      "__uuid__": "6f4f09d2-b43a-4ad7-af0b-245c901186b9"
+    },
+    "soundWin": {
+      "__uuid__": "0886ea22-fb3f-437f-81c7-73d40abd350c"
+    },
+    "soundClick": {
+      "__uuid__": "3a7193a0-69d8-4d78-ba3b-12cf215b010c"
+    },
+    "_isNoneSound": false,
+    "_id": "1ca6Hyw7BLXJzPeyL9geEV"
   },
   {
     "__type__": "cc.Canvas",

@@ -8,11 +8,14 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        Emitter.instance = new Emitter();
+        // Emitter.instance = new Emitter();
         Emitter.instance.registerEvent("transBlocksLayout", this.transBlocksLayout, this);
         Emitter.instance.registerEvent("transBlock", this.transBlock, this);
         Emitter.instance.registerEvent("transScore", this.transScore, this);
         Emitter.instance.registerEvent("transBestScore", this.transBestScore, this);
+        Emitter.instance.registerEvent("transAudio", this.transAudio, this);
+        
+        Emitter.instance.registerEvent("transAudioSceneWelcomeToMain", this.transAudioSceneWelcomeToMain, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         this.node.on('touchstart', (event) => {
             this.startPoint = event.getLocation()
@@ -20,14 +23,29 @@ cc.Class({
         this.node.on('touchend', (event) => {
             this.TouchEnd(event);
         })
-        
+
+
+        console.log(V.audio.playSoundClick());
+        console.log(V.audio.isNoneSound);
+        console.log(V.isNoneSound);
     },
     init(){
         V.bestScore.loadBestScore()
     },
+    transAudioSceneWelcomeToMain(data){
+        console.log(data);
+    },
+    transAudio(data){
+        V.audio1 = data
+        V.audio1.isNoneSound = V.isNoneSound
+        console.log(V.audio1.isNoneSound);
+        // console.log(V.audio1._isNoneSound);
+        // // V.audio = data
+        // V.audio.isNoneSound = V.isNoneSound
+    },
     transBestScore(data){
         V.bestScore = data
-        console.log(V.bestScore);
+        // console.log(V.bestScore);
     },
     transBlocksLayout(data) {
         V.blocksLayout = data
@@ -68,6 +86,7 @@ cc.Class({
                 // for (let col = 0; col < 4; col++) {
                 //     Variables.blockLayout._flag = true
                 //     Variables.blockLayout.moveDown(3,col)
+                V.audio1.playSoundClick()
                 V.blocksLayout.inputDown()
                 // }
                 
@@ -78,6 +97,7 @@ cc.Class({
                 // for (let col = 0; col <= 3; col++) {
                 //     Variables.blockLayout._flag = true
                 //     Variables.blockLayout.moveUp(0,col)
+                V.audio1.playSoundClick()
                 V.blocksLayout.inputUp()
                 // }
                 // Variables.blockLayout.countScore()
@@ -88,6 +108,7 @@ cc.Class({
                 // for (let row = 0; row < 4; row++) {
                 //     Variables.blockLayout._flag = true
                 //     Variables.blockLayout.moveLeft(row)
+                V.audio1.playSoundClick()
                 V.blocksLayout.inputLeft()
                 // }
                 // Variables.blockLayout.countScore()
@@ -109,6 +130,7 @@ cc.Class({
                 // for (let row = 0; row < 4; row++) {
                     
                     // Variables.blockLayout._flag = true
+                    V.audio1.playSoundClick()
                     V.blocksLayout.inputRight()
                     
                    
@@ -127,6 +149,7 @@ cc.Class({
     // called every frame
     start(){
         V.bestScore.loadBestScore()
+        
     },
     update: function (dt) {
 
