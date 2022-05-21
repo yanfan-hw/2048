@@ -7,35 +7,13 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
-let Variables = {
-    rows: 4,
-    cols: 4,
-    numbers: [2,4],
-    blocks: [],
-    data: [],
-    positions: [],
-    // blocksNow: [],
-
-    scoreGame: 0,
-    scoreExtra: 0,
-    bestScoreGame: 0,
-    // blockArr: [],
-
-
-    score: null,
-    bestScore: null,
-    blocksLayout: null,
-    block: null,
-    userData: {
-        score: 0,
-        moveStep: 0
-    }
-}
-module.exports = Variables
+const Emitter = require('mEmitter');
+const V = require('Variables');
 cc.Class({
     extends: cc.Component,
 
     properties: {
+        bestScoreNumber: cc.Label
         // foo: {
         //     // ATTRIBUTES:
         //     default: null,        // The default value will be used only when the component attaching
@@ -55,7 +33,27 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    onLoad () {
+        Emitter.instance.emit('transBestScore', this);
+    },
+    updateBestScore(number) {
+        this.bestScoreNumber.string = number
+    },
+    saveBestScore(userData) {
+        cc.sys.localStorage.setItem('userData', JSON.stringify(userData))
+    },
+    loadBestScore() {
+        console.log("best Score");
+        let userData = JSON.parse(cc.sys.localStorage.getItem('userData'));
+        if (userData == null) {
+            this.saveBestScore(V.userData)
+            return
+        }
+        // console.log(userData.score);
+        this.updateBestScore(userData.score)
+        return userData
+        
+    },
 
     start () {
 
