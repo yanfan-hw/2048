@@ -496,7 +496,7 @@ cc.Class({
     checkWin() {
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
-                if (V.data[i][j] == 16) {
+                if (V.data[i][j] == 2048) {
                     cc.log("Win Game");
                     return true;
                 }
