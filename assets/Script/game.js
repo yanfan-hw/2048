@@ -6,7 +6,6 @@ cc.Class({
     properties: {
     },
 
-    // use this for initialization
     onLoad: function () {
         // Emitter.instance = new Emitter();
         Emitter.instance.registerEvent("transBlocksLayout", this.transBlocksLayout, this);
@@ -39,9 +38,6 @@ cc.Class({
         V.audio1 = data
         V.audio1.isNoneSound = V.isNoneSound
         console.log(V.audio1.isNoneSound);
-        // console.log(V.audio1._isNoneSound);
-        // // V.audio = data
-        // V.audio.isNoneSound = V.isNoneSound
     },
     transBestScore(data){
         V.bestScore = data
