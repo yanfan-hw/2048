@@ -11,6 +11,8 @@ cc.Class({
         Emitter.instance = new Emitter();
         Emitter.instance.registerEvent("transBlocksLayout", this.transBlocksLayout, this);
         Emitter.instance.registerEvent("transBlock", this.transBlock, this);
+        Emitter.instance.registerEvent("transScore", this.transScore, this);
+        Emitter.instance.registerEvent("transBestScore", this.transBestScore, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         this.node.on('touchstart', (event) => {
             this.startPoint = event.getLocation()
@@ -18,14 +20,24 @@ cc.Class({
         this.node.on('touchend', (event) => {
             this.TouchEnd(event);
         })
-
+        
+    },
+    init(){
+        V.bestScore.loadBestScore()
+    },
+    transBestScore(data){
+        V.bestScore = data
+        console.log(V.bestScore);
     },
     transBlocksLayout(data) {
         V.blocksLayout = data
-        console.log(V.blocksLayout);
+        // console.log(V.blocksLayout);
     },
     transBlock(data){
         V.block = data
+    },
+    transScore(data){
+        V.score = data
     },
     TouchEnd(event){
         this.endPoint=event.getLocation();
@@ -76,7 +88,7 @@ cc.Class({
                 // for (let row = 0; row < 4; row++) {
                 //     Variables.blockLayout._flag = true
                 //     Variables.blockLayout.moveLeft(row)
-                // V.blocksLayout.inputLeft()
+                V.blocksLayout.inputLeft()
                 // }
                 // Variables.blockLayout.countScore()
                 // Variables.blockLayout.randomBlock();
@@ -94,13 +106,13 @@ cc.Class({
                 // }
                 // Variables.blockLayout.countScore()
                 // Variables.blockLayout.randomBlock();
-                for (let row = 0; row < 4; row++) {
+                // for (let row = 0; row < 4; row++) {
                     
                     // Variables.blockLayout._flag = true
-                    V.blocksLayout.moveRight(row)
+                    V.blocksLayout.inputRight()
                     
                    
-                }
+                // }
                 break;
             default : {
                 return
@@ -113,6 +125,9 @@ cc.Class({
         // Variables.blockLayout.randomBlock();
     },
     // called every frame
+    start(){
+        V.bestScore.loadBestScore()
+    },
     update: function (dt) {
 
     },
