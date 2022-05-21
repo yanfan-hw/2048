@@ -57,18 +57,43 @@ cc.Class({
         this.endPoint=event.getLocation();
         let subVector= this.endPoint.sub(this.startPoint);
         let delta=subVector.mag();
+        if (V.isCompleted == false) {
+            console.log("not Completed");
+            return
+        }
+        
         if(delta>50){
             if(Math.abs(subVector.x) > Math.abs(subVector.y)){
                 if(subVector.x>0){
+                    V.isCompleted = false
                     cc.log("right");
+                    V.audio1.playSoundClick()
+                    V.blocksLayout.inputRight()
+                    // V.isCompleted = false
+                    V.isMoved = false
                 }else{
+                    V.isCompleted = false
                     cc.log("left");
+                    V.audio1.playSoundClick()
+                    V.blocksLayout.inputLeft()
+                    // V.isCompleted = false
+                    V.isMoved = false
                 }
             }else{
                 if(subVector.y>0){
+                    V.isCompleted = false
                     cc.log("up");
+                    V.audio1.playSoundClick()
+                    V.blocksLayout.inputUp()
+                    // V.isCompleted = false
+                    V.isMoved = false
                 }else{
+                    V.isCompleted = false
                     cc.log("Down");
+                    V.audio1.playSoundClick()
+                    V.blocksLayout.inputDown()
+                    // V.isCompleted = false
+                    V.isMoved = false
                 }
             }
         }
@@ -146,6 +171,7 @@ cc.Class({
                 // }
                 break;
             default : {
+                V.isCompleted = true
                 return
             }
             
