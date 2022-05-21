@@ -165,7 +165,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 316.09927238132013
+      "z": 315.3956267407453
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -6033,6 +6033,7 @@
       "__uuid__": "3a7193a0-69d8-4d78-ba3b-12cf215b010c"
     },
     "_isNoneSound": false,
+    "_isNoneMusic": false,
     "_id": "91MGsMY45N7LbgBZFM9MNk"
   },
   {

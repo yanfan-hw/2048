@@ -20,6 +20,7 @@ let Variables = {
     scoreExtra: 0,
     bestScoreGame: 0,
     isNoneSound: false,
+    isNondMusic:false,
     isCompleted: true,
     isMoved: false,
     // blockArr: [],
