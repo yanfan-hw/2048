@@ -339,9 +339,7 @@ cc.Class({
         for (let i = 0; i < getNodeToMove.length; ++i) {
             this.moveLeft(getNodeToMove[i].x, getNodeToMove[i].y, () => {
                 counter++;
-                // if (counter == getNodeToMove.length) {
-                //     this.afterMove(hasMoved);
-                // }
+
                 this.checkCounter(counter, getNodeToMove, hasMoved)
             });
         }
