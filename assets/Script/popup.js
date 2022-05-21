@@ -1,4 +1,6 @@
 const Emitter = require('mEmitter');
+const V = require("Variables");
+
 cc.Class({
     extends: cc.Component,
 
@@ -7,18 +9,17 @@ cc.Class({
         labelScore: cc.Label,
         particle: cc.Node,
         boardGame: cc.Node,
-        
+
     },
 
     onLoad() {
-        Emitter.instance.registerEvent("showPopupWinGame",this._animOpenPopup.bind(this));
-        this.node.y = 1000;
-        //this._animOpenPopup();
-        //this.particle.active = false
-        this.node.active=false;
+        Emitter.instance.registerEvent("showPopupWinGame", this._animOpenPopup.bind(this));
+        this.node.y = 1100;
+        this.node.active = false;
     },
     _animOpenPopup(scoreGame) {
-        this.node.active=true;
+        V.audio.playSoundWin(); 
+        this.node.active = true;
         this.particle.active = false;
         cc.tween(this.boardGame)
             .to(.5, { opacity: 50 })
@@ -71,9 +72,11 @@ cc.Class({
 
     },
     onClickPlayAgainBtn() {
+        this.node.active = false;
         this._animHidePopup();
         this.particle.active = false;
         this.boardGame.opacity = 255;
+        V.audio.pauseSoundWin();
     }
 
     // update (dt) {},

@@ -168,7 +168,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 315.3956267407453
+      "z": 239.88903684828952
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -1291,7 +1291,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 173.95,
+      "width": 327.19,
       "height": 100.8
     },
     "_anchorPoint": {
@@ -1337,8 +1337,8 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "PLAY",
-    "_N$string": "PLAY",
+    "_string": "Play Game",
+    "_N$string": "Play Game",
     "_fontSize": 80,
     "_lineHeight": 80,
     "_enableWrapText": false,
@@ -3712,7 +3712,7 @@
     },
     "_enabled": true,
     "musicBackGround": {
-      "__uuid__": "337aae20-a6be-4617-95e8-f2fec5ab52a7"
+      "__uuid__": "f4445d0a-898d-4995-ac8f-b812274a0805"
     },
     "soundLose": {
       "__uuid__": "6f4f09d2-b43a-4ad7-af0b-245c901186b9"

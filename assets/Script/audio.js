@@ -49,7 +49,8 @@ cc.Class({
 
     playSoundWin(){
         this.pauseAll()
-        cc.audioEngine.play(this.soundWin, false);
+        let soundWin = cc.audioEngine.play(this.soundWin, false);
+        return soundWin;
     },
     playSoundClick(){
         // this.pauseAll()l
@@ -67,9 +68,17 @@ cc.Class({
         cc.audioEngine.stop(this.playSoundClick());
         
     },
+    pauseSoundWin() {
+        cc.audioEngine.stop(this.playSoundWin());
+        this.playMusicBackground(false);
+    },
+    pauseSoundLose() {
+        cc.audioEngine.stop(this.playSoundWin());
+        this.playMusicBackground(false);
+    },
 
     pauseAll() {
-        cc.audioEngine.pauseAll()
+        cc.audioEngine.pauseAll();
     },
     start () {
 

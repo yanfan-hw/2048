@@ -1,4 +1,6 @@
 const Emitter = require('mEmitter');
+const V = require("Variables");
+
 cc.Class({
     extends: cc.Component,
 
@@ -17,6 +19,7 @@ cc.Class({
     },
     _animOpenPopup(score) {
         this.node.active=true;
+        V.audio.playSoundLose();
         this._animAla();
         cc.tween(this.boardGame)
             .to(.5, { opacity: 50 })
@@ -75,6 +78,7 @@ cc.Class({
     onClickPlayAgainBtn() {
         this._animHidePopup();
         this.boardGame.opacity = 255;
+        V.audio.pauseSoundLose();
     }
 
     // update (dt) {},
