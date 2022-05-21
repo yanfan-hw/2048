@@ -28,13 +28,11 @@ cc.Class({
         cc.sys.localStorage.setItem('userData', JSON.stringify(userData))
     },
     loadBestScore() {
-        console.log("best Score");
         let userData = JSON.parse(cc.sys.localStorage.getItem('userData'));
         if (userData == null) {
             this.saveBestScore(V.userData)
             return
         }
-        // console.log(userData.score);
         this.updateBestScore(userData.score)
         return userData
         

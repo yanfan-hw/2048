@@ -53,9 +53,6 @@ cc.Class({
         return soundWin;
     },
     playSoundClick(){
-        // this.pauseAll()l
-        console.log("PlaySoundClick");
-        // console.log(this.isNoneSound);
         if (this.isNoneSound) {
             return
         }
@@ -63,10 +60,7 @@ cc.Class({
         return soundClick
     },
     pauseSoundClick(){
-        // console.log("Puse Click");
-        // let soundClick = pla
         cc.audioEngine.stop(this.playSoundClick());
-        
     },
     pauseSoundWin() {
         cc.audioEngine.stop(this.playSoundWin());

@@ -13,12 +13,19 @@ cc.Class({
 
     onLoad() {
         Emitter.instance.registerEvent("showPopupLoseGame",this._animOpenPopup.bind(this));
+        // Emitter.instance.registerEvent("transGame",this._transGame.bind(this));
         this.node.y = 1000;
-        this.node.active;
+        this.node.active = false;
 
     },
+    // _transGame(data) {
+    //     V.game = data
+    //     console.log(V.game);
+    // },
     _animOpenPopup(score) {
         this.node.active=true;
+        V.game.enabled = false
+        console.log( V.game);
         V.audio.playSoundLose();
         this._animAla();
         cc.tween(this.boardGame)
@@ -67,9 +74,9 @@ cc.Class({
     },
 
     _animAla(){
-        let actionSacle1=cc.scaleTo(2,1.2,1.2);
+        let actionScale1=cc.scaleTo(2,1.2,1.2);
         let actionScale2=cc.scaleTo(2,1,1);
-        let Action =cc.repeatForever(cc.sequence(actionSacle1,actionScale2));
+        let Action =cc.repeatForever(cc.sequence(actionScale1,actionScale2));
         this.Ala.runAction(Action);
     },
     start() {
@@ -79,8 +86,8 @@ cc.Class({
         this._animHidePopup();
         this.boardGame.opacity = 255;
         V.audio.pauseSoundLose();
+        V.game.enabled = true
     }
-
     // update (dt) {},
 });
 
