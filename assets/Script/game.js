@@ -76,6 +76,11 @@ cc.Class({
 
     
     onKeyDown: function (event) {
+        if (V.isCompleted == false) {
+            console.log("not Completed");
+            return
+        }
+        V.isCompleted = false
         switch (event.keyCode) {
             case cc.macro.KEY.down:
                 console.log('Press a key DOWN');
@@ -84,6 +89,8 @@ cc.Class({
                 //     Variables.blockLayout.moveDown(3,col)
                 V.audio1.playSoundClick()
                 V.blocksLayout.inputDown()
+                // V.isCompleted = false
+                V.isMoved = false
                 // }
                 
                 // Variables.blockLayout.randomBlock();
@@ -95,6 +102,8 @@ cc.Class({
                 //     Variables.blockLayout.moveUp(0,col)
                 V.audio1.playSoundClick()
                 V.blocksLayout.inputUp()
+                // V.isCompleted = false
+                V.isMoved = false
                 // }
                 // Variables.blockLayout.countScore()
                 // Variables.blockLayout.randomBlock();
@@ -106,6 +115,8 @@ cc.Class({
                 //     Variables.blockLayout.moveLeft(row)
                 V.audio1.playSoundClick()
                 V.blocksLayout.inputLeft()
+                // V.isCompleted = false
+                V.isMoved = false
                 // }
                 // Variables.blockLayout.countScore()
                 // Variables.blockLayout.randomBlock();
@@ -128,6 +139,8 @@ cc.Class({
                     // Variables.blockLayout._flag = true
                     V.audio1.playSoundClick()
                     V.blocksLayout.inputRight()
+                    // V.isCompleted = false
+                    V.isMoved = false
                     
                    
                 // }
