@@ -50,6 +50,7 @@ cc.Class({
         block.parent = this.node
         block.setPosition(cc.v2(x, y));
         block.getComponent('block').setLabel(label)
+        block.getComponent('block').appear()
         return block;
     },
     createBlocksLayout() {
@@ -95,6 +96,17 @@ cc.Class({
     },
     gameInit() {
         console.log("new Game");
+        // let nodeChild = this.node.childNodes()
+        // console.log(this.node.getChildByName())
+        // let isNode = this.getNodeToDestroy()
+        // for (let i = 0; index < array.length; index++) {
+        //     for (let index = 0; index < array.length; index++) {
+               
+                
+        //     }
+            
+        // }
+        // console.log(isNode);
         V.blocks = this.createArray2D(4, 4, null)
         V.data = this.createArray2D(4, 4, 0)
         // V.blocks = [];
@@ -122,6 +134,8 @@ cc.Class({
         let block = this.createdBlock(size, size, V.positions[x][y].x, V.positions[x][y].y, numberRandom)
         V.blocks[x][y] = block;
         V.data[x][y] = numberRandom;
+        block.getComponent('block').appear()
+
         return true;
     },
     afterMove(hasMoved) {
@@ -142,8 +156,9 @@ cc.Class({
     },
     mergeNode(block, blockTarget, label, callback) {
         block.destroy();
-        let actions = [cc.scaleTo(0.05, 1.1), cc.scaleTo(0.05, 1), cc.callFunc(() => {
+        let actions = [ cc.callFunc(() => {
             blockTarget.getComponent('block').setLabel(label)
+            blockTarget.getComponent('block').merge()
         }), cc.callFunc(() => { callback() })]
         blockTarget.runAction(cc.sequence(actions));
     },
@@ -397,6 +412,25 @@ cc.Class({
             this.afterMove(hasMoved);
         }
     },
+    newGame() {
+        let nodesToDestroy = [];
+        console.log("new Game");
+        for (let row = 0; row < 4; row++) {
+            for (let col = 0; col < 4; col++) {
+                // console.log(V.blocks[row][col]);
+                if (V.blocks[row][col] != null) {
+                //    V.block[row][col].destroy()
+                nodesToDestroy.push(V.blocks[row][col])
+                //    console.log(row, col);
+                }
+            }
+        }
+        // for (let index = 0; index < array.length; index++) {
+        //     const element = array[index];
+            
+        // }
+        // return nodesToDestroy
+    },
     getNodeToMove() {
         let nodesToMove = [];
         for (let row = 0; row < 4; row++) {
@@ -455,20 +489,20 @@ cc.Class({
     //     cc.log("LOSE GAME");
     // },
 
-    updateBlockNum: function () {
-        for (let row = 0; row < 4; row++) {
-            for (let col = 0; col < 4; col++) {
-                if (V.blocks[row][col] != null) {
-                    console.log(V.blocks[row][col].getComponent('block').setLabel(4));
-                    // console.log(V.data[row][col]);
-                    // console.log(V.blocks[row][col]);
-                    console.log(row, col);
-                    V.blocks[row][col].getComponent('block').setLabel(V.data[row][col])
-                }
-                // this.setLabel()
-            }
-        }
-    },
+    // updateBlockNum: function () {
+    //     for (let row = 0; row < 4; row++) {
+    //         for (let col = 0; col < 4; col++) {
+    //             if (V.blocks[row][col] != null) {
+    //                 console.log(V.blocks[row][col].getComponent('block').setLabel(4));
+    //                 // console.log(V.data[row][col]);
+    //                 // console.log(V.blocks[row][col]);
+    //                 console.log(row, col);
+    //                 V.blocks[row][col].getComponent('block').setLabel(V.data[row][col])
+    //             }
+    //             // this.setLabel()
+    //         }
+    //     }
+    // },
     update(dt) {
         // this._count++ 
         // if (this._count < 10) {

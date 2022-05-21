@@ -16,7 +16,7 @@ cc.Class({
         }
     },
     onLoad() {
-        // Emitter.instance.emit('transBlock', this);
+        Emitter.instance.emit('transBlock', this);
         this.animZoom = cc.scaleTo(0.2, 1);
     },
     // setNumber: function (number) {
@@ -42,5 +42,17 @@ cc.Class({
         }
         this.node.color = colors[label];
         return 1
+    },
+    appear() {
+        let actions = [ cc.scaleTo(0, 0),
+                        // cc.scaleTo(0.2, 1.2),
+                        cc.scaleTo(0.2,1)]
+        this.node.runAction(cc.sequence(actions))
+    },
+    merge() {
+        let actions = [ cc.scaleTo(0.2, 1.3),
+                        cc.scaleTo(0.2, 1),
+                        ]
+        this.node.runAction(cc.sequence(actions))
     },
 });
