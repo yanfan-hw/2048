@@ -2,6 +2,7 @@ const ROWS = 4;
 const NUMBERS = [2, 4];
 const V = require("Variables");
 const Emitter = require('mEmitter');
+
 cc.Class({
     extends: cc.Component,
 
@@ -10,14 +11,12 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
-
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
         Emitter.instance.emit('transBlocksLayout', this);
-        // console.log(V.isNoneSound);
         Emitter.instance.registerEvent("transAudioSceneWelcomeToMain", this.transAudioSceneWelcomeToMain, this);
     },
     transAudioSceneWelcomeToMain(data) {
@@ -29,7 +28,6 @@ cc.Class({
         this.gameInit();
     },
     countScore() {
-        // let extra = Variables.scoreExtra
         if (V.scoreExtra == 0) {
             return
         }
@@ -41,7 +39,6 @@ cc.Class({
         let bestScore = V.bestScore.loadBestScore()
         console.log(bestScore.score);
         if (userData.score > bestScore.score) {
-            console.log("save bestScore :", userData.score);
             V.bestScore.saveBestScore(userData)
             V.bestScore.loadBestScore()
         }
@@ -75,7 +72,6 @@ cc.Class({
         }
     },
 
-
     getEmptyLocations() {
         let emptyLocations = [];
         for (let row = 0; row < 4; row++) {
@@ -101,7 +97,6 @@ cc.Class({
         return arr
     },
     gameInit() {
-        console.log("new Game");
         V.scoreExtra = 0
         V.scoreGame = 0
         V.isCompleted = true
@@ -125,52 +120,35 @@ cc.Class({
             block.getComponent('block').appear();
 
             emptyLocations = this.getEmptyLocations();
-            if(emptyLocations.length==0){
+            if (emptyLocations.length == 0) {
                 this.checkLose();
-                if(this.checkLose()){
-                    Emitter.instance.emit("showPopupLoseGame",V.scoreGame);
+                if (this.checkLose()) {
+                    Emitter.instance.emit("showPopupLoseGame", V.scoreGame);
+                    Emitter.instance.emit('onDisableKeyDownLoseGame');
                 }
             }
-            
+
         }
-
-
-        
     },
 
-
-
     afterMove(hasMoved) {
-        // this.node.stopAllActions()
         if (V.isMoved == false) {
-
             V.isCompleted = true
             console.log(V.isCompleted);
             return
         }
-        // if (hasMoved) {
-        //     // this.updateScore(this.score+1);
-        //     this.countScore()
-        //     this.randomBlock();            
-        // }
-        // this.countScore()
-        // this.randomBlock();
 
         let actions = [cc.callFunc(() => { this.countScore() }),
         cc.callFunc(() => { this.randomBlock() }),
-        cc.callFunc(()=>{
-            if(this.checkWin()){
-                Emitter.instance.emit("showPopupWinGame",V.scoreGame);
+        cc.callFunc(() => {
+            if (this.checkWin()) {
+                Emitter.instance.emit("showPopupWinGame", V.scoreGame);
+                Emitter.instance.emit("onDisabledKeyDown");
             }
         }),
         cc.callFunc(() => { V.isCompleted = true }),
         ]
-        this.node.runAction(cc.sequence(actions))
-        // if (this.checkFail()) {
-        //     this.gameOver();
-        // }
-        
-       
+        this.node.runAction(cc.sequence(actions));
     },
     moveNode(block, position, callback) {
         let actions = [cc.moveTo(0.05, position),
@@ -180,10 +158,10 @@ cc.Class({
     },
     mergeNode(block, blockTarget, label, callback) {
         block.destroy();
-        let actions = [cc.callFunc(() => { blockTarget.getComponent('block').setLabel(label)}),
-            cc.callFunc(() => {blockTarget.getComponent('block').merge()}), 
-            cc.callFunc(() => { V.isMoved = true; }),
-            cc.callFunc(() => { callback() })]
+        let actions = [cc.callFunc(() => { blockTarget.getComponent('block').setLabel(label) }),
+        cc.callFunc(() => { blockTarget.getComponent('block').merge() }),
+        cc.callFunc(() => { V.isMoved = true; }),
+        cc.callFunc(() => { callback() })]
         blockTarget.runAction(cc.sequence(actions));
     },
     inputRight() {
@@ -438,7 +416,6 @@ cc.Class({
     },
     newGame() {
 
-        // let nodesToDestroy = [];
         console.log("new Game");
         for (let row = 0; row < 4; row++) {
             for (let col = 0; col < 4; col++) {
@@ -447,10 +424,9 @@ cc.Class({
                 }
             }
         }
-        this.gameInit()
-        V.audio1.playSoundClick()
-
-
+        this.gameInit();
+        Emitter.instance.emit('onEnableKeyDown');
+        V.audio1.playSoundClick();
     },
     getNodeToMove() {
         let nodesToMove = [];
@@ -464,21 +440,14 @@ cc.Class({
         return nodesToMove
     },
 
-
-
-
-
-
     checkWin() {
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
                 if (V.data[i][j] == 2048) {
-                    cc.log("Win Game");
                     return true;
                 }
             }
         }
-        cc.log("Continoun");
         return false;
     },
 
@@ -488,13 +457,11 @@ cc.Class({
 
                 if (i == 3 && j < 3) {
                     if (V.data[i][j] == V.data[i][j + 1]) {
-                        cc.log("Con choi dc");
                         return false;
                     }
                 } else if (j == 3) {
                     if (i < 3) {
                         if (V.data[i][j] == V.data[i + 1][j]) {
-                            cc.log("Con choi dc");
                             return false;
                         }
                     }
@@ -502,37 +469,10 @@ cc.Class({
                 }
                 else if (V.data[i][j] == V.data[i + 1][j] ||
                     V.data[i][j] == V.data[i][j + 1]) {
-                    cc.log("Con choi dc");
                     return false;
                 }
-
-
             }
         }
-        cc.log("LOSE GAME");
         return true;
     },
-
-    // updateBlockNum: function () {
-    //     for (let row = 0; row < 4; row++) {
-    //         for (let col = 0; col < 4; col++) {
-    //             if (V.blocks[row][col] != null) {
-    //                 console.log(V.blocks[row][col].getComponent('block').setLabel(4));
-    //                 // console.log(V.data[row][col]);
-    //                 // console.log(V.blocks[row][col]);
-    //                 console.log(row, col);
-    //                 V.blocks[row][col].getComponent('block').setLabel(V.data[row][col])
-    //             }
-    //             // this.setLabel()
-    //         }
-    //     }
-    // },
-    update(dt) {
-        // this._count++ 
-        // if (this._count < 10) {
-        //     this._arr.push (this._count)
-        // }else {
-        //     console.log(this._arr);
-        // }
-    }
 });
