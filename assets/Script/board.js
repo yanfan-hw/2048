@@ -132,9 +132,9 @@ cc.Class({
     },
     randomBlock() {
         let emptyLocations = this.getEmptyLocations();
-        if (emptyLocations == "") {
-            return
-        }
+        // if (emptyLocations == "") {
+        //     return
+        // }
         let locationRandom = emptyLocations[Math.floor(Math.random() * emptyLocations.length)];
         let x = locationRandom.x;
         let y = locationRandom.y;
@@ -147,6 +147,14 @@ cc.Class({
 
         return true;
     },
+
+    isCheckFull(){
+        let emptyLocations = this.getEmptyLocations();
+        if(emptyLocations.length==0){
+            this
+        }
+    },
+
     afterMove(hasMoved) {
         // if (hasMoved) {
         //     // this.updateScore(this.score+1);
@@ -196,7 +204,6 @@ cc.Class({
             callback();
             return;
         } else if (V.data[row][col - 1] == 0) {
-            // 移动
             let block = V.blocks[row][col];
             let position = V.positions[row][col - 1];
             V.blocks[row][col - 1] = block;
@@ -208,7 +215,6 @@ cc.Class({
             });
             hasMoved = true;
         } else if (V.data[row][col - 1] == V.data[row][col]) {
-            // 合并
             let block = V.blocks[row][col];
             let position = V.positions[row][col - 1];
             V.data[row][col - 1] *= 2;
