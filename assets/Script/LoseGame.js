@@ -13,19 +13,13 @@ cc.Class({
 
     onLoad() {
         Emitter.instance.registerEvent("showPopupLoseGame",this._animOpenPopup.bind(this));
-        // Emitter.instance.registerEvent("transGame",this._transGame.bind(this));
         this.node.y = 1000;
         this.node.active = false;
 
     },
-    // _transGame(data) {
-    //     V.game = data
-    //     console.log(V.game);
-    // },
     _animOpenPopup(score) {
         this.node.active=true;
         V.game.enabled = false
-        console.log( V.game);
         V.audio.playSoundLose();
         this._animAla();
         cc.tween(this.boardGame)

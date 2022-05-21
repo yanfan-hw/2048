@@ -63,17 +63,13 @@ cc.Class({
                 if (Math.abs(subVector.x) > Math.abs(subVector.y)) {
                     if (subVector.x > 0) {
                         V.isCompleted = false
-                        cc.log("right");
                         V.audio1.playSoundClick()
                         V.blocksLayout.inputRight()
-                        // V.isCompleted = false
                         V.isMoved = false
                     } else {
                         V.isCompleted = false
-                        cc.log("left");
                         V.audio1.playSoundClick()
                         V.blocksLayout.inputLeft()
-                        // V.isCompleted = false
                         V.isMoved = false
                     }
                 } else {
@@ -82,14 +78,11 @@ cc.Class({
                         cc.log("up");
                         V.audio1.playSoundClick()
                         V.blocksLayout.inputUp()
-                        // V.isCompleted = false
                         V.isMoved = false
                     } else {
                         V.isCompleted = false
-                        cc.log("Down");
                         V.audio1.playSoundClick()
                         V.blocksLayout.inputDown()
-                        // V.isCompleted = false
                         V.isMoved = false
                     }
                 }
@@ -111,25 +104,21 @@ cc.Class({
         V.isCompleted = false
         switch (event.keyCode) {
             case cc.macro.KEY.down:
-                console.log('Press a key DOWN');
                 V.audio1.playSoundClick()
                 V.blocksLayout.inputDown()
                 V.isMoved = false
                 break;
             case cc.macro.KEY.up:
-                console.log('Press a key UP');
                 V.audio1.playSoundClick()
                 V.blocksLayout.inputUp()
                 V.isMoved = false
                 break;
             case cc.macro.KEY.left:
-                console.log('Press a key LEFT');
                 V.audio1.playSoundClick()
                 V.blocksLayout.inputLeft()
                 V.isMoved = false
                 break;
             case cc.macro.KEY.right:
-                console.log('Press a key RIGHT');
                 V.audio1.playSoundClick()
                 V.blocksLayout.inputRight()
                 V.isMoved = false
